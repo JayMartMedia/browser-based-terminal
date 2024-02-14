@@ -18,6 +18,5 @@ COPY ./public/* ./public/
 
 # Setup env
 ENV LOG_LEVEL=INFO
-EXPOSE 8080
 
 CMD ["node", "backend/index.js"]
