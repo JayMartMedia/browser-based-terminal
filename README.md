@@ -2,6 +2,7 @@
 
 > WARNING: Running this container in an environment accessible by untrusted users could negatively affect your network/hosts (see [#security](#security))
 
+> WIP: Still early stages in this project. Feel free to play around, but expect changes :)
 ## Overview
 
 This project allows you to run a Docker container that exposes its terminal to the browser. 
