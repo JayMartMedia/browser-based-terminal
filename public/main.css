@@ -3,8 +3,28 @@ html, body {
     height: 100%
 }
 
+main {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+}
+
+/* TODO: make these resizable */
+#sidebar {
+    height: 100%;
+    resize: horizontal;
+    width: 30%;
+    box-sizing: border-box;
+    padding: 0rem 2rem;
+}
+
 #terminal {
     height: 100%;
     padding-left: .5rem;
     background: black;
+}
+
+#sidebar, #terminal {
+    flex-grow: 1;
 }
