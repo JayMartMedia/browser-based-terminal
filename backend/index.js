@@ -3,6 +3,7 @@ const app = express();
 const ws = require('express-ws')
 const os = require('os');
 const pty = require('node-pty');
+const fs = require('node:fs');
 
 ws(app);
 
@@ -72,6 +73,27 @@ const messageProcessor = function (message) {
 const outputProcessor = function (output) {
     return output;
 }
+
+// API Stuffs
+app.get('/sections', (req, res) => {
+    // selecting certain section
+    if(req.query.id) {
+        const id = req.query.id;
+        const t = fs.readFileSync(`sections/${id}/index.html`, 'utf-8');
+        res.send(t);
+        return
+    }
+
+    // selecting list
+    const t = fs.readFileSync(`sections/index.html`, 'utf-8');
+    res.send(t);
+});
+
+app.get('/sections/:id', (req, res) => {
+    const id = req.params.id;
+    const t = fs.readFileSync(`sections/${id}/index.html`, 'utf-8');
+    res.send(t);
+});
 
 app.listen(PORT, () => {
     log(logLevels.INFO, "Listening...")

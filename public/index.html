@@ -6,24 +6,17 @@
   <link rel="stylesheet" href="main.css">
   <script src="../node_modules/xterm/lib/xterm.js"></script>
   <script src="../node_modules/xterm-addon-fit/lib/xterm-addon-fit.js"></script>
+  <script src="https://unpkg.com/htmx.org@1.9.10"></script>
 </head>
 
 <body>
   <main>
     <section id="sidebar">
-      <!-- TODO: Make these reusable -->
-      <h1>Grep</h1>
-      <p>Follow this tutorial to get more familiar with grep!</p>
-
-      <h3>Get more information</h3>
-      <pre>grep --help</pre>
-
-      <h3>Filter lines from stdin</h3>
-      <pre>cat ~/.bashrc | grep function</pre>
-      <i>Returns any lines from initial command that contain the specified text</i>
-
-      <h3>Filter lines from stdin using regex</h3>
-      <pre>ls ~ | grep </pre>
+      <span hx-get="/sections/" hx-trigger="load" hx-target="#select"></span>
+      <select id="select" name="id" style="display:block" hx-get="/sections/" hx-target="#instructions">
+        
+      </select>
+      <div id="instructions" hx-trigger="load" hx-get="/sections/?id=1"></div>
     </section>
     <div id="terminal"></div>
   </main>

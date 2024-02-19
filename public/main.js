@@ -28,10 +28,6 @@ function init() {
 
     term._initialized = true;
 
-    setTimeout(() => {
-        term.prompt();
-    }, 300);
-
     term.onKey(keyObj => {
         runCommand(keyObj.key);
     });

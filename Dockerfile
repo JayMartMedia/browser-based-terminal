@@ -14,7 +14,10 @@ RUN apt-get upgrade && apt-get update && apt-get install vim -y
 COPY ./backend/index.js ./backend/index.js
 
 # Copy frontend public directory
-COPY ./public/* ./public/
+COPY ./public/ ./public/
+
+# Copy directory with sectiosn
+COPY ./sections/ ./sections/
 
 # Setup env
 ENV LOG_LEVEL=INFO
