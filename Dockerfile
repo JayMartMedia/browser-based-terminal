@@ -16,10 +16,14 @@ COPY ./backend/index.js ./backend/index.js
 # Copy frontend public directory
 COPY ./public/ ./public/
 
-# Copy directory with sectiosn
+# Copy directory with sections
 COPY ./sections/ ./sections/
 
 # Setup env
 ENV LOG_LEVEL=INFO
+ENV PATH_TO_SECTIONS=/opt/app/sections
+
+# TODO: I do NOT think the user should have access to read/write files in the app code directory.
+#       They WILL need to have execute in order to run the check scripts.
 
 CMD ["node", "backend/index.js"]

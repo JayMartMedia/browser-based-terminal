@@ -5,3 +5,4 @@
 
 PORT=${1:-8080}
 docker run -d -p $PORT:8080 --name browser-terminal browser-terminal
+docker ps

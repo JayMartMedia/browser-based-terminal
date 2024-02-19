@@ -4,9 +4,11 @@ const ws = require('express-ws')
 const os = require('os');
 const pty = require('node-pty');
 const fs = require('node:fs');
+const childProcess = require('child_process');
 
 ws(app);
 
+const PATH_TO_SECTIONS = process.env.PATH_TO_SECTIONS ?? '~/dev/browser-based-terminal/sections';
 const PORT = 8080;
 
 // TODO: Move logging logic somewhere else
@@ -20,8 +22,8 @@ const logLevels = {
 const logLevel = logLevels[process.env.LOG_LEVEL] ?? logLevels.INFO;
 
 function log(level, ...rest) {
-    if(!logLevel) return;
-    if(level >= logLevel) {
+    if (!logLevel) return;
+    if (level >= logLevel) {
         console.log(...rest);
     }
 }
@@ -46,7 +48,7 @@ app.ws('/', (ws) => {
         rows: 80,
     });
     log(logLevels.INFO, "New session...");
-    
+
     // When UI sends message, resize or run command
     ws.on('message', message => {
         const processedMessage = messageProcessor(message)
@@ -56,7 +58,7 @@ app.ws('/', (ws) => {
             ptyProcess.resize(processedMessage.cols, processedMessage.rows)
         }
     })
-    
+
     // When PTY returns data, send to UI
     ptyProcess.on('data', function (rawOutput) {
         const processedOutput = outputProcessor(rawOutput);
@@ -77,7 +79,7 @@ const outputProcessor = function (output) {
 // API Stuffs
 app.get('/sections', (req, res) => {
     // selecting certain section
-    if(req.query.id) {
+    if (req.query.id) {
         const id = req.query.id;
         const t = fs.readFileSync(`sections/${id}/index.html`, 'utf-8');
         res.send(t);
@@ -89,10 +91,28 @@ app.get('/sections', (req, res) => {
     res.send(t);
 });
 
-app.get('/sections/:id', (req, res) => {
-    const id = req.params.id;
-    const t = fs.readFileSync(`sections/${id}/index.html`, 'utf-8');
-    res.send(t);
+app.get('/sections/check', async (req, res) => {
+    if (req.query.section && req.query.sub) {
+        const section = req.query.section;
+        const sub = req.query.sub;
+        const { stderr, stdout, status } = childProcess.spawnSync('sh', [`${PATH_TO_SECTIONS}/${section}/${sub}.sh`]);
+        if (status !== 0) {
+            const errorText = stderr.toString();
+            // It would be nice to return other data for debugging purposes.. but maybe just include that in html fragment?
+            // return res.status(500).send({
+            //     error: errorText
+            // });
+            // Have to return 200 so that htmx renders as expected..
+            return res.status(200).send('<span>❌</span>');
+        }
+        //   return res.send({
+        //     data: stdout.toString()
+        //   });
+        return res.send('<span>✅</span>')
+    }
+    return res.status(400).send({
+        error: "You must provide section and sub query params. i.e. '/sections/check?section=1&sub=2'"
+    });
 });
 
 app.listen(PORT, () => {
