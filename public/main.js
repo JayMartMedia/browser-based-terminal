@@ -2,7 +2,9 @@ const {FitAddon} = window.FitAddon;
 
 const PORT = 8080;
 
-const socket = new WebSocket(`ws://localhost:${PORT}`);
+const WSS_URL = `ws://${window.location.host}`;
+
+const socket = new WebSocket(WSS_URL);
 socket.onmessage = (event) => {
     term.write(event.data);
 
