@@ -13,15 +13,11 @@ This project was partially inspired by my experience taking the [CKAD](https://w
 
 ## Usage
 
-Running the Docker container in order to access the browser based terminal
+1. Build and run the image: `./script.sh recycle` (if this fails due to port 8080 being in use, you can run by specifying a different port `./script.sh recycle 1234`)
+   - If you are not running from a bash shell, you can look at the docker commands in the build and start functions in [./script.sh](./script.sh) and run them directly in your terminal
+2. Navigate in your browser to [http://localhost:8080](http://localhost:8080) (or the port you specified if 8080 was already in use)
 
-1. Build the image: `./build.sh`
-2. Run the image: `./run.sh` (if this fails due to port 8080 being in use, you can run by specifying a different port `./run.sh 1234`)
-3. Navigate in your browser to [http://localhost:8080](http://localhost:8080) (or the port you specified if 8080 was already in use)
-
-Once the container is running you can interact with it from your browser!
-
-To stop and remove the container you can run `./stop.sh`.
+To stop and remove the container you can run `./script.sh stop -r`.
 
 ## Security
 
